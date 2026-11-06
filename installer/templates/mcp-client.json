@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "uev": {
+      "transport": "stdio",
+      "command": "C:\\Users\\<you>\\AppData\\Local\\UEV\\node\\node.exe",
+      "args": [
+        "C:\\Users\\<you>\\AppData\\Local\\UEV\\app\\dist\\bin.js"
+      ],
+      "env": {
+        "UEV_PROFILE": "supervised",
+        "UEV_BIND_ADDRESS": "127.0.0.1",
+        "UEV_COMMAND_ADDRESS": "127.0.0.1",
+        "UEV_MULTICAST_TTL": "0",
+        "UEV_SUPERVISOR_PIPE": "\\\\.\\pipe\\uev-supervisor"
+      }
+    }
+  }
+}

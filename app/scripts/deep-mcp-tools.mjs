@@ -1,0 +1,18 @@
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import path from "node:path";
+import fs from "node:fs";
+import os from "node:os";
+import { fileURLToPath } from "node:url";
+const FORK = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const transport = new StdioClientTransport({ command: "node", args: [path.join(FORK, "dist/bin.js")], cwd: FORK, env: { ...process.env } });
+const client = new Client({ name: "deeptest", version: "1.0.0" });
+await client.connect(transport);
+const { tools } = await client.listTools();
+const out = tools.map(t => ({ name: t.name, description: t.description, inputSchema: t.inputSchema }));
+const dest = path.join(os.tmpdir(), "uev-deep-mcp-schemas.json");
+fs.writeFileSync(dest, JSON.stringify(out, null, 1));
+const directs = out.filter(t => !t.name.startsWith("manage_"));
+console.log("wrote " + out.length + " schemas; direct: " + directs.map(d => d.name).join(","));
+for (const d of directs) console.log("\n" + d.name + ": " + JSON.stringify(d.inputSchema).slice(0, 500));
+await client.close();

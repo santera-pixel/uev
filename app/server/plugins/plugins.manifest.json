@@ -1,0 +1,250 @@
+{
+	"version": 1,
+	"pythonPlugin": "PythonScriptPlugin",
+	"plugins": [
+		{
+			"name": "PythonScriptPlugin",
+			"required": true,
+			"optionalReference": false,
+			"copyToProject": false,
+			"checkBuildId": true,
+			"pythonProbes": [],
+			"sources": [
+				{
+					"kind": "engine",
+					"path": "Engine/Plugins/Experimental/PythonScriptPlugin"
+				},
+				{
+					"kind": "debloat",
+					"path": "Engine/Plugins/Experimental/PythonScriptPlugin"
+				}
+			],
+			"description": "Python transport for the MCP server. Required."
+		},
+		{
+			"name": "EditorScriptingUtilities",
+			"required": false,
+			"optionalReference": true,
+			"copyToProject": true,
+			"checkBuildId": true,
+			"pythonProbes": [
+				"EditorLevelLibrary",
+				"EditorAssetLibrary"
+			],
+			"sources": [
+				{
+					"kind": "debloat",
+					"path": "Engine/Plugins/Editor/EditorScriptingUtilities"
+				},
+				{
+					"kind": "engine",
+					"path": "Engine/Plugins/Editor/EditorScriptingUtilities"
+				}
+			],
+			"description": "Editor actor, asset, and level scripting APIs."
+		},
+		{
+			"name": "UEVNative",
+			"required": false,
+			"optionalReference": true,
+			"copyToProject": true,
+			"checkBuildId": true,
+			"pythonProbes": [
+				"UEVLibrary",
+				"UEVGraphLibrary"
+			],
+			"sources": [
+				{
+					"kind": "integration",
+					"path": "native/UEVNative"
+				}
+			],
+			"description": "Native transaction and undo/redo bridge."
+		},
+		{
+			"name": "UEVControlPanel",
+			"required": false,
+			"optionalReference": true,
+			"copyToProject": true,
+			"checkBuildId": true,
+			"pythonProbes": [],
+			"sources": [
+				{
+					"kind": "integration",
+					"path": "native/UEVControlPanel"
+				}
+			],
+			"description": "Native Slate in-editor control panel for the MCP server."
+		},
+		{
+			"name": "SequencerScripting",
+			"required": false,
+			"optionalReference": true,
+			"copyToProject": false,
+			"checkBuildId": true,
+			"pythonProbes": [
+				"SequencerTools"
+			],
+			"sources": [
+				{
+					"kind": "engine",
+					"path": "Engine/Plugins/MovieScene/SequencerScripting"
+				},
+				{
+					"kind": "debloat",
+					"path": "Engine/Plugins/MovieScene/SequencerScripting"
+				}
+			],
+			"description": "Sequencer Python track and key APIs."
+		},
+		{
+			"name": "RTXGI",
+			"required": false,
+			"optionalReference": true,
+			"copyToProject": false,
+			"checkBuildId": false,
+			"pythonProbes": [
+				"DDGIVolume",
+				"DDGIVolumeComponent"
+			],
+			"sources": [
+				{
+					"kind": "engine",
+					"path": "Engine/Plugins/Runtime/Nvidia/RTXGI"
+				},
+				{
+					"kind": "debloat",
+					"path": "Engine/Plugins/Runtime/Nvidia/RTXGI"
+				}
+			],
+			"description": "Nvidia RTXGI/DDGI plugin."
+		}
+	],
+	"modules": [
+		{
+			"name": "UEVGraphAuthoring",
+			"required": false,
+			"description": "Native Blueprint, material, AnimGraph, sequence, and montage graph authoring."
+		}
+	],
+	"namespaceRequirements": {
+		"manage_actor": ["EditorScriptingUtilities"],
+		"manage_asset": ["EditorScriptingUtilities"],
+		"manage_level": ["EditorScriptingUtilities"],
+		"manage_inspection": ["EditorScriptingUtilities"],
+		"manage_lighting": ["EditorScriptingUtilities"],
+		"manage_volumes": ["EditorScriptingUtilities"],
+		"manage_navigation": ["EditorScriptingUtilities"],
+		"manage_geometry": ["EditorScriptingUtilities"],
+		"manage_splines": ["EditorScriptingUtilities"],
+		"manage_effect": ["EditorScriptingUtilities"],
+		"manage_material": ["EditorScriptingUtilities"],
+		"manage_texture": ["EditorScriptingUtilities"],
+		"manage_data": ["EditorScriptingUtilities"],
+		"manage_blueprint": ["EditorScriptingUtilities"],
+		"manage_widget": ["EditorScriptingUtilities"],
+		"manage_audio": ["EditorScriptingUtilities"],
+		"manage_input": ["EditorScriptingUtilities"],
+		"manage_gas": ["EditorScriptingUtilities"],
+		"manage_skeleton": ["EditorScriptingUtilities"],
+		"manage_localization": ["EditorScriptingUtilities"],
+		"manage_settings": ["EditorScriptingUtilities"],
+		"manage_sequence": ["SequencerScripting"],
+		"manage_animation": ["UEVGraphAuthoring"],
+		"manage_ddgi": ["RTXGI"]
+	},
+	"actionRequirements": {
+		"manage_blueprint.add_component": ["UEVGraphAuthoring"],
+		"manage_blueprint.add_node": ["UEVGraphAuthoring"],
+		"manage_blueprint.connect_nodes": ["UEVGraphAuthoring"],
+		"manage_blueprint.disconnect_nodes": ["UEVGraphAuthoring"],
+		"manage_blueprint.delete_node": ["UEVGraphAuthoring"],
+		"manage_blueprint.add_variable": ["UEVGraphAuthoring"],
+		"manage_blueprint.set_pin_default": ["UEVGraphAuthoring"],
+		"manage_blueprint.create_function": ["UEVGraphAuthoring"],
+		"manage_blueprint.compile": ["UEVGraphAuthoring"],
+		"manage_blueprint.save": ["UEVGraphAuthoring"],
+		"manage_blueprint.list_graphs": ["UEVGraphAuthoring"],
+		"manage_blueprint.inspect_graph": ["UEVGraphAuthoring"],
+		"manage_blueprint.inspect_function": ["UEVGraphAuthoring"],
+		"manage_blueprint.inspect_blueprint_model": ["UEVGraphAuthoring"],
+		"manage_blueprint.inspect_construction_script": ["UEVGraphAuthoring"],
+		"manage_blueprint.list_macros": ["UEVGraphAuthoring"],
+		"manage_blueprint.inspect_macro": ["UEVGraphAuthoring"],
+		"manage_blueprint.set_function_signature": ["UEVGraphAuthoring"],
+		"manage_blueprint.rename_function": ["UEVGraphAuthoring"],
+		"manage_blueprint.delete_function": ["UEVGraphAuthoring"],
+		"manage_blueprint.add_local_variable": ["UEVGraphAuthoring"],
+		"manage_blueprint.update_local_variable": ["UEVGraphAuthoring"],
+		"manage_blueprint.remove_local_variable": ["UEVGraphAuthoring"],
+		"manage_blueprint.create_macro_library": ["UEVGraphAuthoring"],
+		"manage_blueprint.create_macro": ["UEVGraphAuthoring"],
+		"manage_blueprint.set_macro_signature": ["UEVGraphAuthoring"],
+		"manage_blueprint.rename_macro": ["UEVGraphAuthoring"],
+		"manage_blueprint.delete_macro": ["UEVGraphAuthoring"],
+		"manage_blueprint.reset_construction_script": ["UEVGraphAuthoring"],
+		"manage_blueprint.verify_blueprint": ["UEVGraphAuthoring"],
+		"manage_ai.list_blackboard_keys": ["UEVGraphAuthoring"],
+		"manage_ai.add_blackboard_key": ["UEVGraphAuthoring"],
+		"manage_ai.remove_blackboard_key": ["UEVGraphAuthoring"],
+		"manage_ai.inspect_behavior_tree": ["UEVGraphAuthoring"],
+		"manage_ai.assign_behavior_tree": ["UEVGraphAuthoring"],
+		"manage_ai.bt_create": ["UEVGraphAuthoring"],
+		"manage_ai.bt_inspect": ["UEVGraphAuthoring"],
+		"manage_ai.bt_add_node": ["UEVGraphAuthoring"],
+		"manage_ai.bt_remove_node": ["UEVGraphAuthoring"],
+		"manage_ai.bt_move_node": ["UEVGraphAuthoring"],
+		"manage_ai.bt_set_node_property": ["UEVGraphAuthoring"],
+		"manage_ai.bt_add_decorator": ["UEVGraphAuthoring"],
+		"manage_ai.bt_remove_decorator": ["UEVGraphAuthoring"],
+		"manage_ai.bt_add_service": ["UEVGraphAuthoring"],
+		"manage_ai.bt_remove_service": ["UEVGraphAuthoring"],
+		"manage_ai.bt_set_blackboard": ["UEVGraphAuthoring"],
+		"manage_ai.bt_compile": ["UEVGraphAuthoring"],
+		"manage_ai.bt_repair_graph": ["UEVGraphAuthoring"],
+		"manage_material.inspect_graph": ["UEVGraphAuthoring"],
+		"manage_material.create_material": ["UEVGraphAuthoring"],
+		"manage_material.create_material_function": ["UEVGraphAuthoring"],
+		"manage_material.add_expression": ["UEVGraphAuthoring"],
+		"manage_material.add_function_output": ["UEVGraphAuthoring"],
+		"manage_material.connect": ["UEVGraphAuthoring"],
+		"manage_material.connect_property": ["UEVGraphAuthoring"],
+		"manage_material.delete_expression": ["UEVGraphAuthoring"],
+		"manage_material.set_expression_property": ["UEVGraphAuthoring"],
+		"manage_material.layout": ["UEVGraphAuthoring"],
+		"manage_material.recompile": ["UEVGraphAuthoring"],
+		"manage_material.save": ["UEVGraphAuthoring"],
+		"manage_widget.insert_widget": ["UEVGraphAuthoring"],
+		"manage_widget.reorder_child": ["UEVGraphAuthoring"],
+		"manage_widget.duplicate_widget": ["UEVGraphAuthoring"],
+		"manage_widget.rename_widget": ["UEVGraphAuthoring"],
+		"manage_widget.serialize_tree": ["UEVGraphAuthoring"],
+		"manage_widget.validate_widget": ["UEVGraphAuthoring"],
+		"manage_widget.set_style": ["UEVGraphAuthoring"],
+		"manage_widget.set_brush": ["UEVGraphAuthoring"],
+		"manage_widget.list_delegates": ["UEVGraphAuthoring"],
+		"manage_widget.list_bound_events": ["UEVGraphAuthoring"],
+		"manage_widget.unbind_event": ["UEVGraphAuthoring"],
+		"manage_widget.designer_screenshot": ["UEVGraphAuthoring"],
+		"manage_widget.inspect_selection": ["UEVGraphAuthoring"],
+		"manage_widget.add_widget": ["UEVGraphAuthoring"],
+		"manage_widget.remove_widget": ["UEVGraphAuthoring"],
+		"manage_widget.reparent_widget": ["UEVGraphAuthoring"],
+		"manage_widget.add_child_widget": ["UEVGraphAuthoring"],
+		"manage_widget.remove_child_widget": ["UEVGraphAuthoring"],
+		"editor_create_object": ["EditorScriptingUtilities"],
+		"editor_update_object": ["EditorScriptingUtilities"],
+		"editor_delete_object": ["EditorScriptingUtilities"],
+		"manage_editor.project_info": ["EditorScriptingUtilities"],
+		"manage_editor.map_info": ["EditorScriptingUtilities"],
+		"manage_editor.world_outliner": ["EditorScriptingUtilities"],
+		"manage_editor.screenshot": ["EditorScriptingUtilities"],
+		"manage_editor.move_camera": ["EditorScriptingUtilities"],
+		"manage_editor.start_pie": ["EditorScriptingUtilities"],
+		"manage_editor.stop_pie": ["EditorScriptingUtilities"],
+		"manage_editor.is_pie_running": ["EditorScriptingUtilities"],
+		"manage_system.validate_assets": ["EditorScriptingUtilities"],
+		"manage_history.undo": ["UEVNative"],
+		"manage_history.redo": ["UEVNative"]
+	}
+}

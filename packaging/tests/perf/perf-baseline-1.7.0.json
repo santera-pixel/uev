@@ -1,0 +1,105 @@
+{
+	"version": "1.7.0",
+	"harness": "packaging/tests/perf/authoring.mjs",
+	"recordedAt": "2026-11-06T09:31:10.208Z",
+	"iterations": 7,
+	"notes": "Budgets are p95 milliseconds with a wide CI margin over the 1.7 authoring lane measurements. bt_create 101 / add_node 51-65 / inspect 25-35 / compile 48-59 came from the BT lane; UMG and blueprint are the same order of magnitude. Budgets round up and allow for a backgrounded editor and first-compile spikes.",
+	"metrics": {
+		"bt_create": {
+			"samples": 5,
+			"p50": 56.45,
+			"p95": 79.87,
+			"max": 79.87,
+			"mean": 62.53,
+			"budgetMs": 1500
+		},
+		"bt_add_node": {
+			"samples": 7,
+			"p50": 124.31,
+			"p95": 137.15,
+			"max": 137.15,
+			"mean": 125.86,
+			"budgetMs": 600
+		},
+		"bt_inspect": {
+			"samples": 7,
+			"p50": 43.56,
+			"p95": 51.29,
+			"max": 51.29,
+			"mean": 42.47,
+			"budgetMs": 600
+		},
+		"bt_compile": {
+			"samples": 7,
+			"p50": 70.36,
+			"p95": 81.99,
+			"max": 81.99,
+			"mean": 72.66,
+			"budgetMs": 600
+		},
+		"widget_insert": {
+			"samples": 7,
+			"p50": 106.58,
+			"p95": 133.05,
+			"max": 133.05,
+			"mean": 110.01,
+			"budgetMs": 600
+		},
+		"widget_reorder": {
+			"samples": 7,
+			"p50": 111.99,
+			"p95": 143.27,
+			"max": 143.27,
+			"mean": 115.75,
+			"budgetMs": 600
+		},
+		"widget_style": {
+			"samples": 7,
+			"p50": 111,
+			"p95": 127.15,
+			"max": 127.15,
+			"mean": 113.9,
+			"budgetMs": 600
+		},
+		"widget_screenshot": {
+			"samples": 5,
+			"p50": 64.45,
+			"p95": 280.7,
+			"max": 280.7,
+			"mean": 104.66,
+			"budgetMs": 3000
+		},
+		"blueprint_create_function": {
+			"samples": 5,
+			"p50": 69.86,
+			"p95": 85.73,
+			"max": 85.73,
+			"mean": 71.4,
+			"budgetMs": 1500
+		},
+		"blueprint_add_node": {
+			"samples": 7,
+			"p50": 119.51,
+			"p95": 129.94,
+			"max": 129.94,
+			"mean": 119.93,
+			"budgetMs": 600
+		},
+		"blueprint_compile": {
+			"samples": 7,
+			"p50": 54.74,
+			"p95": 63.35,
+			"max": 63.35,
+			"mean": 51.93,
+			"budgetMs": 600
+		},
+		"blueprint_verify": {
+			"samples": 5,
+			"p50": 47.36,
+			"p95": 53.53,
+			"max": 53.53,
+			"mean": 47.54,
+			"budgetMs": 600
+		}
+	}
+}

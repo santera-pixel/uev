@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "tools": {
+    "manage_editor": {
+      "actions": {
+        "screenshot": { "mode": "read", "timeoutMs": 60000 },
+        "get_console_variable": { "mode": "read", "timeoutMs": 5000 }
+      }
+    },
+    "manage_asset": {
+      "actions": {
+        "validate": { "mode": "read", "timeoutMs": 180000 }
+      }
+    }
+  },
+  "limits": {
+    "defaultCallTimeoutMs": 45000,
+    "maxCallTimeoutMs": 300000
+  }
+}

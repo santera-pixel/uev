@@ -1,0 +1,146 @@
+import json
+
+
+def _get_pie_worlds():
+    if not hasattr(unreal.EditorLevelLibrary, "get_pie_worlds"):
+        return []
+
+    try:
+        return list(unreal.EditorLevelLibrary.get_pie_worlds(False))
+    except TypeError:
+        return list(unreal.EditorLevelLibrary.get_pie_worlds())
+    except Exception:
+        return []
+
+
+def _get_game_world():
+    if not hasattr(unreal.EditorLevelLibrary, "get_game_world"):
+        return None
+
+    try:
+        return unreal.EditorLevelLibrary.get_game_world()
+    except Exception:
+        return None
+
+
+def _pie_status(_args=None):
+    pie_worlds = _get_pie_worlds()
+    game_world = _get_game_world()
+
+    return {
+        "success": True,
+        "is_pie_running": bool(game_world or pie_worlds),
+        "game_world_name": game_world.get_name() if game_world else None,
+        "pie_world_count": len(pie_worlds),
+        "pie_worlds": [world.get_name() for world in pie_worlds],
+    }
+
+
+def start_pie(args):
+    status = _pie_status()
+    previous_running = bool(status["is_pie_running"])
+    if status["is_pie_running"]:
+        status["already_running"] = True
+        return status
+
+    starter = getattr(unreal.EditorLevelLibrary, "editor_play_simulate", None)
+    if not callable(starter):
+        return {
+            "success": False,
+            "message": "EditorLevelLibrary.editor_play_simulate is not exposed in this UE4.27 Python environment.",
+        }
+
+    try:
+        starter()
+    except Exception as exc:
+        return {"success": False, "message": str(exc)}
+
+    status = _pie_status()
+    status["already_running"] = False
+    status["requested"] = True
+    status["previous_is_pie_running"] = previous_running
+    status["transition_pending"] = not status["is_pie_running"]
+    if status["transition_pending"]:
+        status["message"] = (
+            "PIE start was requested. Retry after the editor advances a tick."
+        )
+    return status
+
+
+def _release_retained_objects():
+    try:
+        if hasattr(unreal, "UEVLibrary") and hasattr(
+            unreal.UEVLibrary, "release_all_retained_objects"
+        ):
+            unreal.UEVLibrary.release_all_retained_objects()
+    except Exception:
+        pass
+
+
+def stop_pie(args):
+    status = _pie_status()
+    previous_running = bool(status["is_pie_running"])
+    if not status["is_pie_running"]:
+        status["already_stopped"] = True
+        return status
+
+    stopper = getattr(unreal.EditorLevelLibrary, "editor_end_play", None)
+    if not callable(stopper):
+        return {
+            "success": False,
+            "message": "EditorLevelLibrary.editor_end_play is not exposed in this UE4.27 Python environment.",
+        }
+
+    try:
+        stopper()
+    except Exception as exc:
+        return {"success": False, "message": str(exc)}
+
+    _release_retained_objects()
+
+    status = _pie_status()
+    status["already_stopped"] = False
+    status["requested"] = True
+    status["previous_is_pie_running"] = previous_running
+    status["transition_pending"] = bool(status["is_pie_running"])
+    if status["transition_pending"]:
+        status["message"] = (
+            "PIE stop was requested. Retry after the editor advances a tick."
+        )
+    return status
+
+
+OPERATIONS = {
+    "get_pie_status": _pie_status,
+    "start_pie": start_pie,
+    "stop_pie": stop_pie,
+}
+
+
+def main():
+    operation = decode_template_json("""${operation}""")
+    args = decode_template_json("""${args}""")
+
+    handler = OPERATIONS.get(operation)
+    if not handler:
+        print(
+            json.dumps(
+                {
+                    "success": False,
+                    "message": "Unknown PIE tool operation: {0}".format(operation),
+                },
+                indent=2,
+            )
+        )
+        return
+
+    try:
+        result = handler(args or {})
+    except Exception as exc:
+        result = {"success": False, "message": str(exc)}
+
+    print(json.dumps(result, indent=2))
+
+
+if __name__ == "__main__":
+    main()

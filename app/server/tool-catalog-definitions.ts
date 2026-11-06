@@ -1,0 +1,17 @@
+import { categoryOrder } from "./tool-catalog-categories.js"
+import { toolCatalogEntries, type ToolCatalogEntry } from "./tool-catalog-entry-data.js"
+
+export { categoryOrder, toolCatalogEntries, type ToolCatalogEntry }
+
+export const toolCatalog = Object.fromEntries(
+	toolCatalogEntries.map((entry) => [entry.name, entry]),
+) as Record<string, ToolCatalogEntry>
+
+export const toolDescription = (name: string) => {
+	const entry = toolCatalog[name]
+	if (!entry) {
+		throw new Error(`Unknown tool metadata: ${name}`)
+	}
+
+	return entry.description
+}

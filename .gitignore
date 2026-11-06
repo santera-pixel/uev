@@ -1,0 +1,22 @@
+# Dependencies and build output
+node_modules/
+dist/
+obj/
+bin/
+*.user
+*.suo
+.vs/
+
+# Installer and local state
+.uev/
+Saved/
+.gitignore.tmp
+
+# Logs and captures
+*.log
+*.tmp
+captures/
+
+# Python bytecode
+__pycache__/
+*.pyc

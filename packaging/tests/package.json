@@ -1,0 +1,20 @@
+{
+	"name": "uev-tests",
+	"version": "1.7.0",
+	"private": true,
+	"description": "UEV test matrix, no-editor contract suite and performance harness. Run from the package tests/ folder or from mcp-fork with npm run test:matrix.",
+	"type": "module",
+	"scripts": {
+		"test": "node contract-no-editor.mjs && node matrix.mjs --include-writes && node perf.mjs && node perf/authoring.mjs",
+		"test:matrix": "node matrix.mjs",
+		"test:matrix:writes": "node matrix.mjs --only writes --include-writes",
+		"test:contract": "node contract-no-editor.mjs",
+		"test:perf": "node perf.mjs",
+		"test:perf:authoring": "node perf/authoring.mjs",
+		"test:unattended": "node run-matrix.mjs",
+		"perf:record": "node perf/authoring.mjs --record-baseline",
+		"test:installer": "node installer-dryrun.mjs",
+		"test:reference": "node make-tool-reference.mjs --out ../docs/TOOLS.md --title \"UEV Tool Reference\"",
+		"fixture:record": "node matrix.mjs --record-fixture --only identity"
+	}
+}

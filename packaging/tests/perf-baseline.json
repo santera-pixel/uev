@@ -1,0 +1,49 @@
+{
+	"label": "1.5.0 deep-test pass (warm median/p95 ms)",
+	"source": "D:/Pi-Project/UEV/archive/1.5.0/FINDINGS.md:145",
+	"recordedFor": "UEV 1.6.0 perf gate",
+	"thresholds": {
+		"warmPingP95Ms": 60,
+		"catalogMs": 300,
+		"compileMs": 2000
+	},
+	"metrics": {
+		"warmPing": {
+			"p50": 42,
+			"p95": 64
+		},
+		"projectInfo": {
+			"p50": 68,
+			"p95": 79
+		},
+		"blueprintRead": {
+			"p50": 42,
+			"p95": 55
+		},
+		"materialInspect": {
+			"p50": 48,
+			"p95": 62
+		},
+		"widgetWrite": {
+			"p50": 121,
+			"p95": 127
+		},
+		"objectSet": {
+			"p50": 40,
+			"p95": 45
+		},
+		"compile": {
+			"p50": 49,
+			"p95": 58
+		},
+		"windowScreenshot": {
+			"p50": 1812,
+			"p95": 1903
+		}
+	},
+	"notes": [
+		"The 1.6 warm-ping gate (p95 <= 60 ms) is tighter than the 1.5.0 measured p95 (64 ms): the 1.6 control plane must at least match 1.5.0 and the refactor should beat it.",
+		"Catalog latency was not measured in 1.5.0; 300 ms is the 1.6 budget for a cold catalog response, which is pre-warmed at start-up.",
+		"Compile p95 58 ms in 1.5.0 on BP_UEVMatrixProbe-sized blueprints; the 2 s gate catches a stalled main thread, not normal variance."
+	]
+}

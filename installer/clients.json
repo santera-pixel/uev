@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "entryKey": "uev",
+  "clients": [
+    {
+      "id": "claude-code",
+      "label": "Claude Code",
+      "format": "mcpServers",
+      "scope": "project",
+      "writable": true,
+      "userPath": "${USERPROFILE}\\.claude.json",
+      "projectPath": "${PROJECT}\\.mcp.json",
+      "doc": "https://docs.claude.com/en/docs/claude-code/mcp",
+      "note": "User scope lives in ~/.claude.json; project scope uses .mcp.json (commit-safe)."
+    },
+    {
+      "id": "claude-desktop",
+      "label": "Claude Desktop",
+      "format": "mcpServers",
+      "scope": "user",
+      "writable": true,
+      "userPath": "${APPDATA}\\Claude\\claude_desktop_config.json",
+      "projectPath": "",
+      "doc": "https://modelcontextprotocol.io/quickstart/user",
+      "note": "Restart the app after writing."
+    },
+    {
+      "id": "cursor",
+      "label": "Cursor",
+      "format": "mcpServers",
+      "scope": "user",
+      "writable": true,
+      "userPath": "${USERPROFILE}\\.cursor\\mcp.json",
+      "projectPath": "${PROJECT}\\.cursor\\mcp.json",
+      "doc": "https://docs.cursor.com/context/model-context-protocol",
+      "note": ""
+    },
+    {
+      "id": "vscode",
+      "label": "VS Code (Copilot agent mode)",
+      "format": "servers",
+      "scope": "project",
+      "writable": true,
+      "userPath": "",
+      "projectPath": "${PROJECT}\\.vscode\\mcp.json",
+      "doc": "https://code.visualstudio.com/docs/copilot/customization/mcp-servers",
+      "note": "Uses the servers wrapper and requires type=stdio."
+    },
+    {
+      "id": "windsurf",
+      "label": "Windsurf",
+      "format": "mcpServers",
+      "scope": "user",
+      "writable": true,
+      "userPath": "${USERPROFILE}\\.codeium\\windsurf\\mcp_config.json",
+      "projectPath": "",
+      "doc": "https://docs.windsurf.com/windsurf/cascade/mcp",
+      "note": ""
+    },
+    {
+      "id": "cline",
+      "label": "Cline (VS Code)",
+      "format": "paste",
+      "scope": "user",
+      "writable": false,
+      "userPath": "",
+      "projectPath": "",
+      "doc": "https://docs.cline.bot/mcp",
+      "note": "MCP settings live in the extension panel (MCP Servers > Configure). Paste the snippet."
+    },
+    {
+      "id": "roo-code",
+      "label": "Roo Code",
+      "format": "mcpServers",
+      "scope": "project",
+      "writable": true,
+      "userPath": "",
+      "projectPath": "${PROJECT}\\.roo\\mcp.json",
+      "doc": "https://docs.roocode.com/features/mcp/using-mcp-in-roo",
+      "note": "Project scope only; global servers are a separate list."
+    },
+    {
+      "id": "codex",
+      "label": "Codex CLI",
+      "format": "toml",
+      "scope": "user",
+      "writable": false,
+      "userPath": "${USERPROFILE}\\.codex\\config.toml",
+      "projectPath": "",
+      "doc": "https://developers.openai.com/codex/mcp/",
+      "note": "TOML; add the printed [mcp_servers.uev] block."
+    },
+    {
+      "id": "gemini-cli",
+      "label": "Gemini CLI",
+      "format": "mcpServers",
+      "scope": "user",
+      "writable": true,
+      "userPath": "${USERPROFILE}\\.gemini\\settings.json",
+      "projectPath": "",
+      "doc": "https://github.com/google-gemini/gemini-cli/blob/main/docs/tools/mcp-server.md",
+      "note": ""
+    },
+    {
+      "id": "zed",
+      "label": "Zed",
+      "format": "context_servers",
+      "scope": "user",
+      "writable": true,
+      "userPath": "${APPDATA}\\Zed\\settings.json",
+      "projectPath": "",
+      "doc": "https://zed.dev/docs/ai/mcp",
+      "note": "Uses the context_servers wrapper with a nested command object."
+    },
+    {
+      "id": "continue",
+      "label": "Continue",
+      "format": "yaml",
+      "scope": "user",
+      "writable": false,
+      "userPath": "${USERPROFILE}\\.continue\\config.yaml",
+      "projectPath": "",
+      "doc": "https://docs.continue.dev/customize/model-providers/mcp",
+      "note": "YAML; add the printed mcpServers list entry."
+    },
+    {
+      "id": "jetbrains",
+      "label": "JetBrains IDEs",
+      "format": "paste",
+      "scope": "user",
+      "writable": false,
+      "userPath": "",
+      "projectPath": "",
+      "doc": "https://www.jetbrains.com/help/ai-assistant/mcp.html",
+      "note": "Settings > Tools > AI Assistant > MCP; paste the JSON."
+    },
+    {
+      "id": "opencode",
+      "label": "opencode",
+      "format": "opencode",
+      "scope": "user",
+      "writable": false,
+      "userPath": "${USERPROFILE}\\.config\\opencode\\opencode.json",
+      "projectPath": "",
+      "doc": "https://opencode.ai/docs/mcp-servers/",
+      "note": "Uses a local MCP type with a command array; paste the printed block."
+    },
+    {
+      "id": "goose",
+      "label": "goose",
+      "format": "yaml",
+      "scope": "user",
+      "writable": false,
+      "userPath": "${APPDATA}\\Block\\goose\\config\\config.yaml",
+      "projectPath": "",
+      "doc": "https://block.github.io/goose/docs/getting-started/using-extensions",
+      "note": "YAML extensions entry; paste the printed block."
+    },
+    {
+      "id": "kiro",
+      "label": "Kiro",
+      "format": "mcpServers",
+      "scope": "project",
+      "writable": true,
+      "userPath": "",
+      "projectPath": "${PROJECT}\\.kiro\\settings\\mcp.json",
+      "doc": "https://kiro.dev/docs/mcp/",
+      "note": ""
+    },
+    {
+      "id": "copilot-cli",
+      "label": "GitHub Copilot CLI",
+      "format": "paste",
+      "scope": "user",
+      "writable": false,
+      "userPath": "",
+      "projectPath": "",
+      "doc": "https://docs.github.com/en/copilot/how-tos/copilot-cli",
+      "note": "Use /mcp add inside the CLI; paste the command and args."
+    },
+    {
+      "id": "pi",
+      "label": "Pi",
+      "format": "mcpServers",
+      "scope": "user",
+      "writable": true,
+      "userPath": "${USERPROFILE}\\.pi\\agent\\mcp.json",
+      "projectPath": "${PROJECT}\\.pi\\mcp.json",
+      "doc": "https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/mcp.md",
+      "note": "User scope ~/.pi/agent/mcp.json; project scope .pi/mcp.json."
+    },
+    {
+      "id": "antigravity",
+      "label": "Google Antigravity",
+      "format": "mcpServers",
+      "scope": "user",
+      "writable": true,
+      "userPath": "${USERPROFILE}\\.gemini\\config\\mcp_config.json",
+      "projectPath": "${PROJECT}\\.agents\\mcp_config.json",
+      "doc": "https://antigravity.google/docs/mcp",
+      "note": "Global ~/.gemini/config/mcp_config.json; workspace .agents/mcp_config.json."
+    },
+    {
+      "id": "deepseek-harness",
+      "label": "DeepSeek Harness",
+      "format": "dsh",
+      "scope": "user",
+      "writable": false,
+      "userPath": "",
+      "projectPath": "",
+      "doc": "https://deepseekharness.io/plugins/",
+      "note": "DSH manages MCP servers through a plugin (dsh-mcp-manager) with its own settings page; install that plugin, then add the printed entry there."
+    },
+    {
+      "id": "custom",
+      "label": "Any other stdio MCP client",
+      "format": "custom",
+      "scope": "user",
+      "writable": false,
+      "userPath": "${PROJECT}\\Saved\\UEV\\uev-mcp.json",
+      "projectPath": "${PROJECT}\\Saved\\UEV\\uev-mcp.json",
+      "doc": "",
+      "note": "Writes a universal recipe plus the snippet below; paste it into the client's config."
+    }
+  ]
+}

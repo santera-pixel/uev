@@ -1,0 +1,177 @@
+{
+  "generatedAt": "2026-11-05T23:04:49.647Z",
+  "budget": {
+    "coldFirstPingMs": 1500,
+    "warmPingP95Ms": 60,
+    "toolOverheadP95Ms": 100
+  },
+  "cold": {
+    "firstPingMs": 847.1086,
+    "firstCatalogMs": 853.1535,
+    "startup": {
+      "bootAt": "2026-11-05T23:04:49.708Z",
+      "elapsedMs": 775,
+      "phases": [
+        {
+          "name": "preludes",
+          "atMs": 289,
+          "sincePreviousMs": 289
+        },
+        {
+          "name": "imports",
+          "atMs": 602,
+          "sincePreviousMs": 313
+        },
+        {
+          "name": "runtime",
+          "atMs": 610,
+          "sincePreviousMs": 8
+        },
+        {
+          "name": "registry",
+          "atMs": 662,
+          "sincePreviousMs": 52
+        },
+        {
+          "name": "catalog",
+          "atMs": 686,
+          "sincePreviousMs": 24
+        },
+        {
+          "name": "prewarm",
+          "atMs": 687,
+          "sincePreviousMs": 1
+        },
+        {
+          "name": "control-listen",
+          "atMs": 713,
+          "sincePreviousMs": 26
+        }
+      ]
+    },
+    "stderr": [
+      "UEV safety: profile=unattended (read-only); allowlist v1; audit=C:\\Users\\Santera\\.uev\\audit.jsonl",
+      "UEV catalog: built in 19ms; 174382 bytes",
+      "UEV prewarm: catalog built in 20ms",
+      "UEV control API: http://127.0.0.1:26229; descriptor=C:\\Users\\Santera\\AppData\\Local\\Temp\\uev-latency-cold-26229.json; profile=unattended (read-only)",
+      "Using Unreal Remote Execution bind address: 192.168.1.2 (command: 192.168.1.2:6776)"
+    ]
+  },
+  "descriptor": "C:\\Users\\Santera\\AppData\\Local\\UEV\\control.json",
+  "port": 8765,
+  "identity": {
+    "productName": "UEV",
+    "productVersion": "1.6.0",
+    "serverVersion": "2026.11.6-1",
+    "protocolVersion": 2
+  },
+  "startup": {
+    "bootAt": "2026-11-05T22:57:12.207Z",
+    "elapsedMs": 458331,
+    "phases": [
+      {
+        "name": "preludes",
+        "atMs": 83,
+        "sincePreviousMs": 83
+      },
+      {
+        "name": "imports",
+        "atMs": 183,
+        "sincePreviousMs": 100
+      },
+      {
+        "name": "runtime",
+        "atMs": 186,
+        "sincePreviousMs": 3
+      },
+      {
+        "name": "registry",
+        "atMs": 209,
+        "sincePreviousMs": 23
+      },
+      {
+        "name": "catalog",
+        "atMs": 219,
+        "sincePreviousMs": 10
+      },
+      {
+        "name": "prewarm",
+        "atMs": 219,
+        "sincePreviousMs": 0
+      },
+      {
+        "name": "control-listen",
+        "atMs": 233,
+        "sincePreviousMs": 14
+      },
+      {
+        "name": "editor-probe",
+        "atMs": 7346,
+        "sincePreviousMs": 7113
+      }
+    ]
+  },
+  "ping": {
+    "n": 40,
+    "min": 6,
+    "p50": 15.8,
+    "p95": 20.9,
+    "max": 22.6,
+    "mean": 14.7
+  },
+  "catalog": {
+    "n": 20,
+    "min": 2.4,
+    "p50": 15.4,
+    "p95": 16.5,
+    "max": 18,
+    "mean": 13.3,
+    "bytes": 164707
+  },
+  "readAction": {
+    "n": 20,
+    "min": 290.2,
+    "p50": 331.5,
+    "p95": 358.9,
+    "max": 363.3,
+    "mean": 332.1,
+    "server": {
+      "n": 20,
+      "min": 273,
+      "p50": 314,
+      "p95": 327,
+      "max": 333,
+      "mean": 312
+    }
+  },
+  "writeAction": {
+    "n": 5,
+    "min": 276.6,
+    "p50": 334,
+    "p95": 337.2,
+    "max": 337.2,
+    "mean": 323.3,
+    "server": {
+      "n": 5,
+      "min": 264,
+      "p50": 326,
+      "p95": 335,
+      "max": 335,
+      "mean": 315.8
+    }
+  },
+  "toolOverheadMs": {
+    "n": 20,
+    "min": 4.7,
+    "p50": 17.5,
+    "p95": 37.9,
+    "max": 47.3,
+    "mean": 20.2,
+    "note": "per call: client wall time minus that same call's server durationMs"
+  },
+  "verdict": {
+    "coldFirstPing": "PASS",
+    "warmPingP95": "PASS",
+    "toolOverheadP95": "PASS"
+  }
+}

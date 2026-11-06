@@ -1,0 +1,60 @@
+{
+  "name": "uev",
+  "version": "2026.11.6-1",
+  "description": "UE4.27-first MCP server for controlling the Unreal Editor through Unreal Python Remote Execution.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "uev": "dist/bin.js"
+  },
+  "scripts": {
+    "dev": "tsx --watch server/bin.ts",
+    "build": "node scripts/build.mjs",
+    "prepack": "npm run build",
+    "start": "node dist/bin.js",
+    "test:e2e": "node scripts/run-e2e.mjs",
+    "test:no-unreal": "npm run build && node scripts/no-unreal-smoke.mjs",
+    "test:safety": "tsx scripts/safety-smoke.ts",
+    "test:matrix": "node \"../packaging/tests/matrix.mjs\"",
+    "test:matrix:writes": "node \"../packaging/tests/matrix.mjs\" --only writes --include-writes",
+    "test:contract": "node \"../packaging/tests/contract-no-editor.mjs\"",
+    "test:perf": "node \"../packaging/tests/perf.mjs\"",
+    "test:perf:authoring": "node \"../packaging/tests/perf/authoring.mjs\"",
+    "test:unattended": "node \"../packaging/tests/run-matrix.mjs\"",
+    "typecheck": "tsc --noEmit",
+    "postbuild": "node dist/scripts/make-executable.js && node dist/scripts/update-readme.js",
+    "publish:check": "npm run typecheck && npm run build && npm pack --dry-run",
+    "fmt": "biome format . --write && biome check --formatter-enabled=false --linter-enabled=false --organize-imports-enabled=true --write",
+    "set:version": "node scripts/set-version.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "unreal",
+    "mcp",
+    "modelcontextprotocol",
+    "uev-native",
+    "ue4",
+    "ue4.27",
+    "uev"
+  ],
+  "author": "UEV project (derived from conaman/unreal-mcp-ue4, MIT)",
+  "license": "MIT",
+  "packageManager": "npm@10.8.1",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "unreal-remote-execution": "^1.0.0",
+    "zod": "^3.25.48"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^22.15.29",
+    "esbuild": "^0.25.10",
+    "tsx": "^4.20.6",
+    "typescript": "^5.8.3"
+  }
+}

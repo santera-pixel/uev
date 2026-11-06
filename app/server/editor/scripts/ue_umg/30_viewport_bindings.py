@@ -1,0 +1,292 @@
+import json
+
+
+def bind_widget_event(args):
+    widget_name = args.get("widget_name")
+    widget_member_name = args.get("widget_member_name") or args.get("widget_component_name")
+    event_name = args.get("event_name")
+    function_name = args.get("function_name") or "{0}_{1}".format(
+        widget_member_name, event_name
+    )
+
+    if not widget_member_name:
+        return {"success": False, "message": "widget_member_name is required"}
+
+    pie_error = require_editor_not_in_play("bind_widget_event")
+    if pie_error:
+        return pie_error
+
+    try:
+        widget_blueprint = _load_widget_blueprint(widget_name)
+        if not hasattr(unreal, "DelegateEditorBinding"):
+            if not hasattr(unreal, "UEVGraphLibrary"):
+                return {
+                    "success": False,
+                    "message": "Delegate binding requires the UEVNative/UEVGraphAuthoring plugin, which is not loaded.",
+                }
+            raw = unreal.UEVGraphLibrary.execute_graph_operation(
+                "blueprint.bind_widget_event",
+                json.dumps({
+                    "asset_path": get_asset_package_name(widget_blueprint),
+                    "widget_member_name": widget_member_name,
+                    "event_name": event_name,
+                    "function_name": function_name,
+                }),
+            )
+            return json.loads(str(raw))
+        _apply_delegate_binding(
+            widget_blueprint,
+            widget_member_name,
+            event_name,
+            function_name=function_name,
+        )
+        return {
+            "success": True,
+            "widget_blueprint": get_asset_package_name(widget_blueprint),
+            "widget": widget_member_name,
+            "event_name": event_name,
+            "function_name": function_name,
+        }
+    except Exception as exc:
+        return _format_widget_authoring_error(exc)
+
+
+def _retain_viewport_widget(widget_instance):
+    try:
+        if hasattr(unreal, "UEVLibrary") and hasattr(
+            unreal.UEVLibrary, "retain_object"
+        ):
+            unreal.UEVLibrary.retain_object(widget_instance)
+            return True
+    except Exception:
+        pass
+
+    try:
+        registry = getattr(unreal, "_mcp_viewport_widgets", None)
+        if registry is None:
+            registry = []
+            setattr(unreal, "_mcp_viewport_widgets", registry)
+        registry.append(widget_instance)
+        while len(registry) > 32:
+            registry.pop(0)
+    except Exception:
+        pass
+
+    return False
+
+
+def release_viewport_widgets(args):
+    released = 0
+    try:
+        if hasattr(unreal, "UEVLibrary") and hasattr(
+            unreal.UEVLibrary, "release_all_retained_objects"
+        ):
+            released = int(unreal.UEVLibrary.get_retained_object_count())
+            unreal.UEVLibrary.release_all_retained_objects()
+    except Exception as exc:
+        return {"success": False, "message": str(exc)}
+
+    try:
+        if hasattr(unreal, "_mcp_viewport_widgets"):
+            delattr(unreal, "_mcp_viewport_widgets")
+    except Exception:
+        pass
+
+    return {"success": True, "released": released}
+
+
+def add_widget_to_viewport(args):
+    widget_name = args.get("widget_name")
+    z_order = int(args.get("z_order", 0))
+    start_pie_if_needed = bool(
+        args.get("start_pie_if_needed") or args.get("auto_start_pie")
+    )
+    timeout_seconds = float(args.get("timeout_seconds", 8.0))
+    poll_interval = float(args.get("poll_interval", 0.25))
+
+    widget_blueprint, widget_path, widget_class = _resolve_widget_runtime_class(widget_name)
+    if not widget_blueprint and not widget_class:
+        return {
+            "success": False,
+            "message": "Asset not found: {0}".format(widget_name),
+        }
+
+    if not widget_class and widget_blueprint:
+        widget_class = get_blueprint_generated_class(widget_blueprint)
+
+    if not widget_class:
+        return {
+            "success": False,
+            "message": "Could not resolve widget class for {0}".format(widget_name),
+        }
+
+    pie_status = None
+    game_world = _get_viewport_game_world()
+    if not game_world and start_pie_if_needed:
+        pie_status = _start_pie_for_viewport(timeout_seconds, poll_interval)
+        if pie_status.get("success") is False:
+            return pie_status
+        game_world = _get_viewport_game_world()
+
+    if not game_world:
+        if pie_status:
+            return {
+                "success": False,
+                "message": "PIE start was requested, but the game world is not ready yet. Retry manage_widget.add_to_viewport after the editor advances a tick.",
+                "transition_pending": True,
+                "retry_recommended": True,
+                "retry_action": "add_to_viewport",
+                "pie_status": pie_status,
+            }
+
+        return {
+            "success": False,
+            "message": "A PIE or game world is required to add a widget to the viewport. Pass start_pie_if_needed: true to let this action start PIE first.",
+        }
+
+    widget_instance = None
+    try:
+        if hasattr(unreal.UserWidget, "create_widget_instance"):
+            widget_instance = unreal.UserWidget.create_widget_instance(
+                game_world,
+                widget_class,
+                widget_class.get_name(),
+            )
+    except Exception:
+        widget_instance = None
+
+    if widget_instance is None:
+        try:
+            widget_instance = unreal.new_object(get_UClass(widget_class), outer=game_world)
+        except Exception:
+            widget_instance = None
+
+    if widget_instance is None or not hasattr(widget_instance, "add_to_viewport"):
+        return {
+            "success": False,
+            "message": "Could not instantiate a UserWidget in this UE4.27 Python environment.",
+        }
+
+    try:
+        widget_instance.add_to_viewport(z_order)
+    except Exception as exc:
+        return _format_widget_authoring_error(exc)
+
+    retained = _retain_viewport_widget(widget_instance)
+    in_viewport = False
+    try:
+        in_viewport = bool(widget_instance.is_in_viewport())
+    except Exception:
+        pass
+
+    return {
+        "success": True,
+        "widget_blueprint": widget_path,
+        "widget_class": get_object_name(widget_class),
+        "z_order": z_order,
+        "started_pie": bool(pie_status and pie_status.get("requested")),
+        "pie_status": pie_status,
+        "retained": retained,
+        "in_viewport": in_viewport,
+    }
+
+
+def _get_viewport_game_world():
+    try:
+        if hasattr(unreal.EditorLevelLibrary, "get_game_world"):
+            return unreal.EditorLevelLibrary.get_game_world()
+    except Exception:
+        return None
+    return None
+
+
+def _get_viewport_pie_worlds():
+    if not hasattr(unreal.EditorLevelLibrary, "get_pie_worlds"):
+        return []
+
+    try:
+        return list(unreal.EditorLevelLibrary.get_pie_worlds(False))
+    except TypeError:
+        return list(unreal.EditorLevelLibrary.get_pie_worlds())
+    except Exception:
+        return []
+
+
+def _get_viewport_pie_status():
+    game_world = _get_viewport_game_world()
+    pie_worlds = _get_viewport_pie_worlds()
+    return {
+        "success": True,
+        "is_pie_running": bool(game_world or pie_worlds),
+        "game_world_name": game_world.get_name() if game_world else None,
+        "pie_world_count": len(pie_worlds),
+        "pie_worlds": [world.get_name() for world in pie_worlds],
+    }
+
+
+def _start_pie_for_viewport(timeout_seconds=None, poll_interval=None):
+    status = _get_viewport_pie_status()
+    if status.get("game_world_name"):
+        status["already_running"] = True
+        return status
+
+    requested = False
+    if not status["is_pie_running"]:
+        starter = getattr(unreal.EditorLevelLibrary, "editor_play_simulate", None)
+        if not callable(starter):
+            return {
+                "success": False,
+                "message": "EditorLevelLibrary.editor_play_simulate is not exposed in this UE4.27 Python environment.",
+            }
+
+        try:
+            starter()
+            requested = True
+        except Exception as exc:
+            return {"success": False, "message": str(exc)}
+
+    status = _get_viewport_pie_status()
+    status["already_running"] = False
+    status["requested"] = requested
+    status["transition_pending"] = not status.get("game_world_name")
+    if status["transition_pending"]:
+        status["message"] = "PIE start was requested. Retry after the editor advances a tick."
+    return status
+
+
+def set_text_block_binding(args):
+    widget_name = args.get("widget_name")
+    text_block_name = args.get("text_block_name")
+    binding_property = args.get("binding_property") or "TextDelegate"
+    function_name = args.get("function_name")
+    source_property = args.get("source_property")
+
+    if not function_name and not source_property:
+        return {
+            "success": False,
+            "message": "Either function_name or source_property is required.",
+        }
+
+    pie_error = require_editor_not_in_play("set_text_block_binding")
+    if pie_error:
+        return pie_error
+
+    try:
+        widget_blueprint = _load_widget_blueprint(widget_name)
+        _apply_delegate_binding(
+            widget_blueprint,
+            text_block_name,
+            binding_property,
+            function_name=function_name,
+            source_property=source_property,
+        )
+        return {
+            "success": True,
+            "widget_blueprint": get_asset_package_name(widget_blueprint),
+            "widget": text_block_name,
+            "binding_property": binding_property,
+            "function_name": function_name,
+            "source_property": source_property,
+        }
+    except Exception as exc:
+        return _format_widget_authoring_error(exc)
